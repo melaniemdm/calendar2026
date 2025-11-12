@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Génère le calendrier complet ASMAA à partir d'un fichier de configuration YAML :
-- 1 page de couverture avec photo
-- 12 pages mensuelles avec photos différentes
-Les chemins, couleurs et paramètres sont définis dans config.yaml
-"""
+
 
 import os
 import calendar
