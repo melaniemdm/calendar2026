@@ -1,0 +1,33 @@
+# Configuration du calendrier ASMAA
+year: 2026
+association: "Association Saint Maurienne des Amis des Animaux (ASMAA)"
+
+# Chemins
+paths:
+  images_dir: "images"
+  output_dir: "calendrier_ASMAA_2026"
+
+# Mise en page
+layout:
+  dpi: 300
+  paper:
+    width_in: 8.27    # A4
+    height_in: 11.69  # A4
+  background_color: "pink"
+  text_color: "#444444"
+  weekend_bg: "#e8e8e8"
+  grid_color: "#cccccc"
+
+# Jours fériés français
+holidays:
+  - [2026, 1, 1, "Jour de l’An"]
+  - [2026, 4, 6, "Lundi de Pâques"]
+  - [2026, 5, 1, "Fête du Travail"]
+  - [2026, 5, 8, "Victoire 1945"]
+  - [2026, 5, 14, "Ascension"]
+  - [2026, 5, 25, "Lundi de Pentecôte"]
+  - [2026, 7, 14, "Fête nationale"]
+  - [2026, 8, 15, "Assomption"]
+  - [2026, 11, 1, "Toussaint"]
+  - [2026, 11, 11, "Armistice"]
+  - [2026, 12, 25, "Noël"]

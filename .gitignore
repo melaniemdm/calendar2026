@@ -1,0 +1,6 @@
+# Ignorer toutes les images PNG
+*.png
+**/*.png
+
+# Ignorer le dossier virtuel Python
+venv/

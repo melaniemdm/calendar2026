@@ -1,0 +1,7 @@
+matplotlib==3.9.2
+PyYAML==6.0.2
+
+# Outils utiles
+pillow==10.4.0        # Pour une meilleure compatibilité image
+black==24.8.0         # Formatage automatique du code
+flake8==7.1.0         # Vérification de la qualité du code
