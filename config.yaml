@@ -1,4 +1,3 @@
-# Configuration du calendrier ASMAA
 year: 2026
 association: "Association Saint Maurienne des Amis des Animaux (ASMAA)"
 
@@ -7,23 +6,43 @@ paths:
   images_dir: "images"
   output_dir: "calendrier_ASMAA_2026"
   background_image: "images/stella.png"
+
 # Mise en page
 layout:
   dpi: 300
   paper:
-    width_in: 8.27    # A4
-    height_in: 11.69  # A4
+    width_in: 8.27
+    height_in: 11.69
   background_color: "white"
   text_color: "black"
   weekend_bg: "#e8e8e8"
   grid_color: "#cccccc"
 
-effects:
-  blur_radius: 6   #  intensité du flou de fond (0 = aucun flou, 10 = très flou)
-  white_veil_opacity: 0.30    # voile blanc (0 = désactivé, 1 = blanc total)
-  white_veil_color: "#ffffff" # couleur du voile (ex : "#ffffff" pour blanc, "#000000" pour noir)
+  title:
+    text_y: 240
+    fontsize: 40
+    fontweight: "bold"
+    color: "#000000"
 
-# Jours fériés français
+  cover_photo:
+    x: 25
+    y: 60
+    w: 160
+    h: 120
+
+association_style:
+  text_y: 215
+  fontsize: 20
+  fontweight: "bold"
+  color: "#000000"
+  auto_newline: true
+  newline_token: " des "
+
+effects:
+  blur_radius: 6
+  white_veil_opacity: 0.30
+  white_veil_color: "#ffffff"
+
 holidays:
   - [2026, 1, 1, "Jour de l’An"]
   - [2026, 4, 6, "Lundi de Pâques"]
