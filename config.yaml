@@ -6,17 +6,22 @@ association: "Association Saint Maurienne des Amis des Animaux (ASMAA)"
 paths:
   images_dir: "images"
   output_dir: "calendrier_ASMAA_2026"
-
+  background_image: "images/stella.png"
 # Mise en page
 layout:
   dpi: 300
   paper:
     width_in: 8.27    # A4
     height_in: 11.69  # A4
-  background_color: "pink"
-  text_color: "#444444"
+  background_color: "white"
+  text_color: "black"
   weekend_bg: "#e8e8e8"
   grid_color: "#cccccc"
+
+effects:
+  blur_radius: 6   #  intensité du flou de fond (0 = aucun flou, 10 = très flou)
+  white_veil_opacity: 0.30    # voile blanc (0 = désactivé, 1 = blanc total)
+  white_veil_color: "#ffffff" # couleur du voile (ex : "#ffffff" pour blanc, "#000000" pour noir)
 
 # Jours fériés français
 holidays:
