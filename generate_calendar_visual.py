@@ -53,9 +53,9 @@ WEEKDAYS_FR = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dim
 
 
 # --- Fonctions principales ---
-print(f" BACKGROUND_IMAGE = {BACKGROUND_IMAGE}")
-print(f" Chemin absolu = {os.path.abspath(BACKGROUND_IMAGE)}")
-print(f" Existe ? {os.path.exists(BACKGROUND_IMAGE)}")
+#print(f" BACKGROUND_IMAGE = {BACKGROUND_IMAGE}")
+#print(f" Chemin absolu = {os.path.abspath(BACKGROUND_IMAGE)}")
+#print(f" Existe ? {os.path.exists(BACKGROUND_IMAGE)}")
 
 def draw_cover_page(year, outpath, image_path=None):
     """Crée la page de garde du calendrier"""
@@ -195,7 +195,7 @@ def draw_cover_page(year, outpath, image_path=None):
     # ================================
     fig.savefig(outpath, dpi=DPI, bbox_inches="tight", pad_inches=0)
     plt.close(fig)
-    print(f" Page de garde enregistrée → {outpath}")
+    print(f"✅ Page de garde enregistrée → {outpath}")
 
 
 
@@ -205,17 +205,27 @@ def draw_cover_page(year, outpath, image_path=None):
 
 def draw_month_visual(year, month, outpath, image_path=None):
     """Crée une page mensuelle du calendrier"""
+
     fig = plt.figure(figsize=(WIDTH_IN, HEIGHT_IN), dpi=DPI)
     ax = plt.axes([0, 0, 1, 1])
     ax.set_xlim(0, 210)
     ax.set_ylim(0, 297)
     ax.axis("off")
 
-    ax.add_patch(Rectangle((0, 0), 210, 297, facecolor=BG_COLOR, edgecolor="none"))
+    # Fond général
+    ax.add_patch(Rectangle((0, 0), 210, 297,
+                           facecolor=BG_COLOR, edgecolor="none"))
 
-    # Titre
-    ax.text(10, 282, f"{MONTHS_FR[month-1]} {year}", fontsize=22,
-            color=TEXT_COLOR, va="top", ha="left", fontweight="bold")
+    # Titre du mois
+    ax.text(
+        10, 282,
+        f"{MONTHS_FR[month-1]} {year}",
+        fontsize=22,
+        color=TEXT_COLOR,
+        va="top",
+        ha="left",
+        fontweight="bold"
+    )
 
     # --- Zone photo ---
     photo_x, photo_y, photo_w, photo_h = 10, 160, 190, 110
@@ -223,61 +233,102 @@ def draw_month_visual(year, month, outpath, image_path=None):
     if image_path and os.path.exists(image_path):
         try:
             img = mpimg.imread(image_path)
-            print(f"   ✅ Image chargée : {image_path} | type={type(img)}, shape={getattr(img, 'shape', 'inconnu')}")
-            if img is None or (hasattr(img, "size") and img.size == 0):
-                print(f"   ⚠️ Image vide ou non lisible pour {MONTHS_FR[month-1]}")
-                ax.add_patch(Rectangle((photo_x, photo_y), photo_w, photo_h,
-                                       facecolor="#e6e6e6", edgecolor="#dddddd", linewidth=1))
-                ax.text(photo_x + photo_w/2, photo_y + photo_h/2, "ZONE PHOTO",
-                        fontsize=18, color="#888888", ha="center", va="center")
+            ih, iw = img.shape[:2]
+
+            # Ratios
+            ratio_img = iw / ih
+            ratio_zone = photo_w / photo_h
+
+            # Taille sans déformation
+            if ratio_img > ratio_zone:
+                # Image trop large
+                new_w = photo_w
+                new_h = photo_w / ratio_img
             else:
-                ax.imshow(img, extent=[photo_x, photo_x + photo_w, photo_y, photo_y + photo_h],
-                          aspect='auto', zorder=5)
-                print(f"✅ Image insérée pour {MONTHS_FR[month-1]} : {image_path}")
+                # Image trop haute
+                new_h = photo_h
+                new_w = photo_h * ratio_img
+
+            # Centrage de l'image dans la zone
+            ox = photo_x + (photo_w - new_w) / 2
+            oy = photo_y + (photo_h - new_h) / 2
+
+            ax.imshow(
+                img,
+                extent=[ox, ox + new_w, oy, oy + new_h],
+                zorder=5
+            )
+
+            print(f"   ✅ Image insérée sans déformation pour {MONTHS_FR[month-1]}")
+
         except Exception as e:
             print(f"⚠️ Erreur lors de l’insertion de {MONTHS_FR[month-1]} : {e}")
+            ax.add_patch(Rectangle((photo_x, photo_y), photo_w, photo_h,
+                                   facecolor="#e6e6e6", edgecolor="#dddddd", linewidth=1))
+            ax.text(photo_x + photo_w/2, photo_y + photo_h/2,
+                    "ZONE PHOTO", fontsize=18, color="#888888",
+                    ha="center", va="center")
+
     else:
         print(f"❌ Image non trouvée pour {MONTHS_FR[month-1]} : {image_path}")
         ax.add_patch(Rectangle((photo_x, photo_y), photo_w, photo_h,
                                facecolor="#e6e6e6", edgecolor="#dddddd", linewidth=1))
-        ax.text(photo_x + photo_w/2, photo_y + photo_h/2, "ZONE PHOTO",
-                fontsize=18, color="#888888", ha="center", va="center")
+        ax.text(photo_x + photo_w/2, photo_y + photo_h/2,
+                "ZONE PHOTO", fontsize=18, color="#888888",
+                ha="center", va="center")
 
     # --- Grille du calendrier ---
     cal = calendar.Calendar(firstweekday=0)
     month_days = cal.monthdayscalendar(year, month)
+
     left, bottom, right, top = 10, 22, 200, 150
     cols = 7
     rows = 1 + len(month_days)
+
     cell_w = (right - left) / cols
     cell_h = (top - bottom) / rows
 
-    # Entêtes
+    # En-têtes (jours de semaine)
     for c in range(cols):
         x = left + c * cell_w
         y = top - cell_h
         ax.add_patch(Rectangle((x, y), cell_w, cell_h,
                                facecolor="white", edgecolor=GRID_COLOR, linewidth=0.8))
-        ax.text(x + cell_w/2, y + cell_h/2, WEEKDAYS_FR[c],
-                ha="center", va="center", fontsize=12, color=TEXT_COLOR)
+        ax.text(
+            x + cell_w/2, y + cell_h/2,
+            WEEKDAYS_FR[c],
+            ha="center", va="center",
+            fontsize=12, color=TEXT_COLOR
+        )
 
-    # Jours
+    # Jours du mois
     for r, week in enumerate(month_days):
         for c, day in enumerate(week):
             x = left + c * cell_w
             y = top - (r + 2) * cell_h
+
             is_weekend = (c >= 5)
             face = WEEKEND_BG if is_weekend else "white"
+
             ax.add_patch(Rectangle((x, y), cell_w, cell_h,
                                    facecolor=face, edgecolor=GRID_COLOR, linewidth=0.8))
+
             if day != 0:
                 color = "red" if (year, month, day) in HOLIDAYS else TEXT_COLOR
-                ax.text(x + cell_w * 0.08, y + cell_h * 0.78, str(day),
-                        ha="left", va="top", fontsize=11, color=color)
+                ax.text(
+                    x + cell_w * 0.08, y + cell_h * 0.78,
+                    str(day),
+                    ha="left", va="top",
+                    fontsize=11, color=color
+                )
 
+    # Export
     fig.savefig(outpath, dpi=DPI, bbox_inches="tight", pad_inches=0.2)
     plt.close(fig)
+
     print(f"💾 Mois {MONTHS_FR[month-1]} enregistré sous : {outpath}")
+
+
 
 
 def generate_full_calendar():

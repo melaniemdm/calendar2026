@@ -5,7 +5,7 @@ association: "Association Saint Maurienne des Amis des Animaux (ASMAA)"
 paths:
   images_dir: "images"
   output_dir: "calendrier_ASMAA_2026"
-  background_image: "images/stella.png"
+   #background_image: "images/stella.png"
 
 # Mise en page
 layout:
@@ -55,3 +55,4 @@ holidays:
   - [2026, 11, 1, "Toussaint"]
   - [2026, 11, 11, "Armistice"]
   - [2026, 12, 25, "Noël"]
+
